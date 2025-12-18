@@ -9,7 +9,7 @@ namespace Karesz
     public partial class Form1 : Form
     {
         static Random r = new Random();
-        string betöltendő_pálya = "kiszabadit.txt";
+        string betöltendő_pálya = "palya01.txt";
         void Türelmesen_Lépj(Robot r, int db)
         {
             while (0 < db)
