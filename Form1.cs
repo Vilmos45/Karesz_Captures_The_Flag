@@ -17,6 +17,7 @@ namespace Karesz
                 while (true)
                     Lőjj();
 
+
             };
         }
 
