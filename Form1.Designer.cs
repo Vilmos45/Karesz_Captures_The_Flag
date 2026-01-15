@@ -42,9 +42,9 @@ namespace Karesz
 			this.időtextbox = new System.Windows.Forms.TextBox();
 			this.zsebeibenlabel = new System.Windows.Forms.Label();
 			this.hótextbox = new System.Windows.Forms.TextBox();
-			this.sárgatextbox = new System.Windows.Forms.TextBox();
+			this.kéktextbox = new System.Windows.Forms.TextBox();
 			this.hólabel = new System.Windows.Forms.Label();
-			this.sárgalabel = new System.Windows.Forms.Label();
+			this.kéklabel = new System.Windows.Forms.Label();
 			this.zöldtextbox = new System.Windows.Forms.TextBox();
 			this.pirostextbox = new System.Windows.Forms.TextBox();
 			this.feketetextbox = new System.Windows.Forms.TextBox();
@@ -101,9 +101,9 @@ namespace Karesz
 			this.monitorpanel2.Controls.Add(this.időtextbox);
 			this.monitorpanel2.Controls.Add(this.zsebeibenlabel);
 			this.monitorpanel2.Controls.Add(this.hótextbox);
-			this.monitorpanel2.Controls.Add(this.sárgatextbox);
+			this.monitorpanel2.Controls.Add(this.kéktextbox);
 			this.monitorpanel2.Controls.Add(this.hólabel);
-			this.monitorpanel2.Controls.Add(this.sárgalabel);
+			this.monitorpanel2.Controls.Add(this.kéklabel);
 			this.monitorpanel2.Controls.Add(this.zöldtextbox);
 			this.monitorpanel2.Controls.Add(this.pirostextbox);
 			this.monitorpanel2.Controls.Add(this.feketetextbox);
@@ -297,14 +297,14 @@ namespace Karesz
 			this.hótextbox.Text = "5";
 			this.hótextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
-			// sárgatextbox
+			// kéktextbox
 			// 
-			this.sárgatextbox.Location = new System.Drawing.Point(84, 578);
-			this.sárgatextbox.Name = "sárgatextbox";
-			this.sárgatextbox.Size = new System.Drawing.Size(64, 21);
-			this.sárgatextbox.TabIndex = 25;
-			this.sárgatextbox.Text = "13";
-			this.sárgatextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.kéktextbox.Location = new System.Drawing.Point(84, 578);
+			this.kéktextbox.Name = "kéktextbox";
+			this.kéktextbox.Size = new System.Drawing.Size(64, 21);
+			this.kéktextbox.TabIndex = 25;
+			this.kéktextbox.Text = "13";
+			this.kéktextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
 			// 
 			// hólabel
 			// 
@@ -318,17 +318,17 @@ namespace Karesz
 			this.hólabel.Text = "hó";
 			this.hólabel.Click += new System.EventHandler(this.hólabel_Click);
 			// 
-			// sárgalabel
+			// kéklabel
 			// 
-			this.sárgalabel.AutoSize = true;
-			this.sárgalabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-			this.sárgalabel.ForeColor = System.Drawing.Color.Yellow;
-			this.sárgalabel.Location = new System.Drawing.Point(20, 579);
-			this.sárgalabel.Name = "sárgalabel";
-			this.sárgalabel.Size = new System.Drawing.Size(56, 20);
-			this.sárgalabel.TabIndex = 22;
-			this.sárgalabel.Text = "sárga";
-			this.sárgalabel.Click += new System.EventHandler(this.sárgalabel_Click);
+			this.kéklabel.AutoSize = true;
+			this.kéklabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+			this.kéklabel.ForeColor = System.Drawing.Color.Blue;
+			this.kéklabel.Location = new System.Drawing.Point(20, 579);
+			this.kéklabel.Name = "kéklabel";
+			this.kéklabel.Size = new System.Drawing.Size(56, 20);
+			this.kéklabel.TabIndex = 22;
+			this.kéklabel.Text = "kék";
+			this.kéklabel.Click += new System.EventHandler(this.kéklabel_Click);
 			// 
 			// zöldtextbox
 			// 
@@ -540,9 +540,9 @@ namespace Karesz
         private TextBox időtextbox;
         private Label zsebeibenlabel;
         private TextBox hótextbox;
-        private TextBox sárgatextbox;
+        private TextBox kéktextbox;
         private Label hólabel;
-        private Label sárgalabel;
+        private Label kéklabel;
         private TextBox zöldtextbox;
         private TextBox pirostextbox;
         private TextBox feketetextbox;

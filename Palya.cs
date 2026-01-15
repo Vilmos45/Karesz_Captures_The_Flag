@@ -186,7 +186,7 @@ namespace Karesz
                     case fekete:
                     case piros:
                     case zöld:
-                    case sárga:
+                    case kék:
                     case hó:
                         Körrajz(e, alakid, x, y, méret);
                         break;

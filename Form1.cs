@@ -3,22 +3,48 @@
 
 namespace Karesz
 {
-
     public partial class Form1 : Form
     {
-
         // IDE JÖNNEK AZ ELJÁRÁSOK ÉS FÜGGVÉNYEK
-
         void DIÁK_ROBOTJAI()
         {
-            Test.várakozási_idő = 10;
-            Robot.Get("Karesz").Feladat = delegate ()
+            /*Robot.Get("Janesz").Feladat = delegate ()
             {
-                while (true)
-                    Lőjj();
-
+                Lépj();
 
             };
+
+            Robot.Get("Karesz").Feladat = delegate ()
+            {
+                /* új képek robotokhoz + hozzájuk tenni
+                * ellenséges robot szenzor (int: távolság)
+                * barátságos-e (szembe levő legközelebbi robot: bool) -> igaz ha barátságos vagy nincs, false ha ellenséges
+                * leprogramozni botokat (védő, támadó) -> legyen ugyanolyan
+                * mindkettő robot:
+                *	- ha van itt fehér kavics vedd fel
+                *	támadó:
+                *	- elmegy az ellenséges kavicshoz, felveszi, és visszaviszi, és leteszi
+                *	- közben, ha találkozik valakivel, lő, amíg van kavicsa
+                *	védő: 
+                *	- vár a kavics mellett, amíg nem jön valaki, azt lelövi
+                * még kívülről is elérhetőek a tanár robotjainak a funkciói
+                * tudjanak üzenni
+                * 
+                * Hógolyó felujítása:
+                *	- legyen fehér kavics, ahol leesik, ha belemegy a falba, üsszeütköznek egymással, ha belemegy robotba (mindig)
+                *	- szívjanak!
+                *	- legyen csak öt hógolyójuk
+                *	- ne ugorja át a közvetlenül előtte elő levő dolgokat
+                * Mikor van vége, ablak bezárása, ablak normális működése!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                *//*
+
+                Lőjj();//hibás Baratsagos_e függvény, meghívhatatlan
+
+                //int a = Milyen_messze_van_hógolyó();
+                //bool b = Erre_jön_e_a_hógolyó();
+                //bool c = Barátságos_e();
+
+            };*/
         }
 
     }
@@ -29,6 +55,17 @@ namespace Karesz
 
 
 /* USERS MANUAL -- LEGFONTOSABB PARANCSOK
+
+PÁLYASPECIFIKUS
+
+Lőjj();							-------- Karesz lő előre egy hógolyót
+
+Milyen_messze_van_hógolyó()		-------- Visszaadja a Karesszal szemben levő legközelebbi hógolyó távolságát, vagy -1-et
+Erre_jön_e_a_hógolyó()			-------- igaz, ha Karesz felé közeledik a Karesszal szembe levő legközelebbi hógolyó
+
+HASZNOS
+
+Várj();							-------- Karesz kihagyja magát egy körből, amíg a többiek lépnek
 
 MOZGÁSOK
 
@@ -54,3 +91,5 @@ Hőmérséklet();              -------- a Karesz által mért hőmérséklet. A 
 
 A szenzorokat bármennyiszer használhatja a robot a saját körén belül.
 */
+
+//A pályát készíték: Kovács Ádám, Zenzerov Maxim, Vilmos45 /24F

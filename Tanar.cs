@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Karesz
@@ -9,153 +6,185 @@ namespace Karesz
     public partial class Form1 : Form
     {
         static Random r = new Random();
-        string betöltendő_pálya = "palya01.txt";
-        void Türelmesen_Lépj(Robot r, int db)
-        {
-            while (0 < db)
-            {
-                if (1 != r.UltrahangSzenzor())
-                {
-                    r.Lépj();
-                    db--;
-                }
-                else
-                {
-                    r.Várj();
-                }
-            }
-        }
-        void Körbemegy(Robot r)
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                Türelmesen_Lépj(r, 3);
-                r.Fordulj(jobbra);
-                Türelmesen_Lépj(r, 3);
-            }
-        }
-        void Félkör(Robot r)
-        {
-            Türelmesen_Lépj(r, 18);
-            r.Fordulj(balra);
-            Körbemegy(r);
-            r.Fordulj(balra);
-        }
+        string betöltendő_pálya = "Palya01.txt";
+
         void TANÁR_ROBOTJAI()
         {
-            Betölt(betöltendő_pálya);
-            List<Vektor> alsókocka = Vektor.Rács(new Vektor(33, 23), new Vektor(40, 30));
-            List<Vektor> jobbalsóháromszög = alsókocka.Where(p => p.X + p.Y >= 64).ToList();
-            jobbalsóháromszög.Shuffle();
-            foreach (Vektor p in jobbalsóháromszög.Take(2))
+            /*
+            #region TANÁR_FÜGGVÉNYEI
+            void BaratsagosRobotSpawn()
             {
-                pálya.LegyenItt(p, hó);
+                int kh = r.Next(1, 30);
+                while (pálya.MiVanItt(new Vektor(1, kh)) == fal)
+                    kh = r.Next(1, 30);
+                new Robot("Karesz", 0, 0, 0, 0, 5, 1, kh, r.Next(3));//5 hógolyóval indít
+                int khk = r.Next(1, 30);
+                r.Next(3);
+                while (khk == kh || pálya.MiVanItt(new Vektor(1, khk)) == fal)
+                    khk = r.Next(1, 30);
+                new Robot("Janesz", 0, 0, 0, 0, 5, 1, khk, r.Next(3));
             }
 
-            int x = r.Next(18, 23);
-            Vektor ablak = new Vektor(x, 16);
-            pálya.LegyenItt(ablak, üres);
-
-            Vektor mag = new Vektor(37, 25);
-            List<Vektor> lehetséges_útvégek = new List<Vektor>();
-            while (mag.Y < 30)
+            (Robot, Robot) EllensegesRobotSpawn()
             {
-                lehetséges_útvégek.Add(mag);
-                mag += new Vektor(-1, 1);
+                int kh = r.Next(1, 30);
+                while (pálya.MiVanItt(new Vektor(39, kh)) == fal) //még mindig spawnolhat a falba valamilyen misztikus okból...
+                    kh = r.Next(1, 30);
+                Robot gpnesz = new Robot("Gonesz", Robot.képkészlet_lilesz, 0, 0, 0, 1, 10, 39, kh, 3, 1, false);//10 hógolyóval indít
+                int khk = r.Next(1, 30);
+                while (khk == kh || pálya.MiVanItt(new Vektor(39, khk)) == fal)
+                    khk = r.Next(1, 30);
+                Robot gbnesz = new Robot("Ganesz", Robot.képkészlet_lilesz, 0, 0, 0, 0, 10, 39, khk, 3, 1, false);
+                return (gpnesz, gbnesz);
             }
-            lehetséges_útvégek.Shuffle();
-            Vektor út_vége = lehetséges_útvégek.First();
-            Vektor móló_vége = new Vektor(x, 21);
-            foreach (Vektor p in Vektor.Cikk(móló_vége, út_vége))
-            {
-                pálya.LegyenItt(p, fekete);
-            }
-            pálya.LegyenItt(móló_vége, piros);
 
-            Robot karesz = new Robot(
-                név: "Karesz",
-                képkészlet: Robot.képkészlet_karesz,
-                kődb: new int[] { 0, 0, 0, 0, 0 },
-                h: new Vektor(39 + r.Next(3) - 1, 29 + r.Next(3) - 1),
-                v: Vektor.Észak,
-                uh_engedélyezve: true,
-                szuh_engedélyezve: false
-                );
-            Frissít();
-            Robot őrvezető = new Robot(
-                név: "Őrvezető",
-                képkészlet: Robot.képkészlet_gonesz,
-                kődb: new int[] { 0, 0, 0, 0, 0 },
-                h: new Vektor(19, 15),
-                v: Vektor.Nyugat,
-                uh_engedélyezve: true,
-                szuh_engedélyezve: false
-                );
-            őrvezető.Feladat = delegate ()
+            void Támadás(Robot r)
             {
-                Türelmesen_Lépj(őrvezető, 8);
-                őrvezető.Fordulj(balra);
-                Körbemegy(őrvezető);
-                őrvezető.Fordulj(balra);
+                while (true)
+                    Lépj(r);
+                //r.Lőjj();
+            }
+
+            bool Biztonságos_e(Robot r)
+            {
+                return !(r.Erre_jön_e_a_hógolyó() && (r.Milyen_messze_van_hógolyó() < 4 || r.Milyen_messze_van_hógolyó() == -1));
+            }
+
+            bool Biztonságos_e_lepni(Robot r, int irány = 0)
+            {
+                switch (irány)
+                {
+                    case -1:
+                        int b = r.SzélesUltrahangSzenzor().Item1;
+                        if (b > 1 || b == -1)
+                            return true;
+                        return false;
+                    case 0:
+                        int e = r.SzélesUltrahangSzenzor().Item2;
+                        if (e > 1 || e == -1)
+                            return true;
+                        return false;
+                    case 1:
+                        int j = r.SzélesUltrahangSzenzor().Item3;
+                        if (j > 1 || j == -1)
+                            return true;
+                        return false;
+                    case 2:
+                        r.Fordulj(balra);
+                        b = r.SzélesUltrahangSzenzor().Item1;
+                        r.Fordulj(jobbra);
+                        if (b > 1 || b == -1)
+                            return true;
+                        return false;
+                }
+                return false;
+            }
+
+            void Lépj(Robot r, int n = 1, int irány = 0)
+            {
+                switch (irány)
+                {
+                    case -1:
+                        r.Fordulj(balra);
+                        break;
+                    case 1:
+                        r.Fordulj(jobbra);
+                        break;
+                    case 2:
+                        r.Fordulj(balra);
+                        r.Fordulj(balra);
+                        break;
+                    case -45:
+                        return;
+                }
+                for (int i = 0; (i < n) && Biztonságos_e_lepni(r); i++)
+                    r.Lépj();
+                switch (irány)
+                {
+                    case -1:
+                        r.Fordulj(jobbra);
+                        break;
+                    case 1:
+                        r.Fordulj(balra);
+                        break;
+                    case 2:
+                        r.Fordulj(jobbra);
+                        r.Fordulj(jobbra);
+                        break;
+                }
+                return;
+            }
+
+            void Vár(Robot r, int n)
+            {
+                for (int i = 0; i < n; i++)
+                    r.Várj();
+            }
+            #endregion
+
+            BaratsagosRobotSpawn();
+            (Robot gonesz, Robot ganesz) = EllensegesRobotSpawn();
+
+            bool nalunk_e_a_masik_zaszlo = false;
+            bool meg_van_e_a_zaszlo = true;
+
+            ganesz.Feladat = delegate //védelmező
+            {
                 while (true)
                 {
-                    Félkör(őrvezető);
-                }
-            };
-            Robot lilesz = new Robot(
-                név: "Maresz",
-                képkészlet: Robot.képkészlet_maresz,
-                kődb: new int[] { 0, 0, 0, 0, 0 },
-                h: new Vektor(20, 15),
-                v: Vektor.Nyugat,
-                uh_engedélyezve: true,
-                szuh_engedélyezve: false
-                );
-            lilesz.Feladat = delegate ()
-            {
-                Türelmesen_Lépj(lilesz, 9);
-                lilesz.Fordulj(balra);
-                Körbemegy(lilesz);
-                lilesz.Fordulj(balra);
-                int db = 0;
-                while (!(Test.lista.Count == 2 && Test.lista.Contains(lilesz) && Test.lista.Contains(karesz) && db % 2 == 1))
-                {
-                    Félkör(lilesz);
-                    db++;
+                    if (!meg_van_e_a_zaszlo)
+                    {
+                        Támadás(ganesz);
+                    }
+                    /*if (!Baratsagos_e())
+                    {
+                        if (ganesz.Köveinek_száma_ebből(kék) == 0)
+                            meg_van_e_a_zaszlo = false;
+                    }
+                    else if (!Biztonságos_e(ganesz))
+                    {
+                        int szI1 = ganesz.SzélesUltrahangSzenzor().Item1;
+                        int szI3 = ganesz.SzélesUltrahangSzenzor().Item3;
+                        Lépj(ganesz, 1, (szI1 > 0 || szI1 == -1) ? -1 : (szI3 > 0 || szI3 == -1) ? 1 : -45);
+                        if (!Biztonságos_e(ganesz))
+                            ganesz.Lőjj();
+                    }
+                    else
+                    {
+                        Vár(ganesz, 2);
+                        ganesz.Fordulj(jobbra);
+                    }
+
                 }
 
-                lilesz.Mondd("De hiszen már nem őriz senki! Szabad vagyok!");
-                Türelmesen_Lépj(lilesz, 9);
-                lilesz.Fordulj(jobbra);
-                Türelmesen_Lépj(lilesz, 12);
-                lilesz.Fordulj(balra);
-                Türelmesen_Lépj(lilesz, 2);
-                lilesz.Fordulj(jobbra);
-                Türelmesen_Lépj(lilesz, 2);
-                lilesz.Fordulj(balra);
-                Türelmesen_Lépj(lilesz, 100);
             };
-            Robot közlegény = new Robot(
-                név: "Közlegény",
-                képkészlet: Robot.képkészlet_gonesz,
-                kődb: new int[] { 0, 0, 0, 0, 0 },
-                h: new Vektor(21, 15),
-                v: Vektor.Nyugat,
-                uh_engedélyezve: true,
-                szuh_engedélyezve: false
-                );
-            közlegény.Feladat = delegate ()
+
+            gonesz.Feladat = delegate //támadó
             {
-                Türelmesen_Lépj(közlegény, 10);
-                közlegény.Fordulj(balra);
-                Körbemegy(közlegény);
-                közlegény.Fordulj(balra);
                 while (true)
                 {
-                    Félkör(közlegény);
+                    if (!nalunk_e_a_masik_zaszlo)
+                    {
+                        Támadás(gonesz);
+                        if (gonesz.Köveinek_száma_ebből(kék) == 1)
+                            nalunk_e_a_masik_zaszlo = true;
+                    }
+                    if (!Biztonságos_e(gonesz))
+                    {
+                        int szI1 = gonesz.SzélesUltrahangSzenzor().Item1;
+                        int szI3 = gonesz.SzélesUltrahangSzenzor().Item3;
+                        Lépj(gonesz, 1, (szI1 > 0 || szI1 == -1) ? -1 : (szI3 > 0 || szI3 == -1) ? 1 : -45);
+                        if (!Biztonságos_e(gonesz))
+                            gonesz.Lőjj();
+                    }
+                    else
+                    {
+                        Vár(gonesz, 2);
+                        gonesz.Fordulj(jobbra);
+                    }
                 }
             };
-
+            */
         }
     }
 }
